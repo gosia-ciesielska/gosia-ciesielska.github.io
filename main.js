@@ -16,6 +16,7 @@ class Game {
     thingyHappiness = 0.5;
     thingyHunger = 0.5;
     thingyHealth = 1;
+    cookieSpritesheet;
 
     async main() {
         this.musicPlayer.loop = true;
@@ -53,6 +54,16 @@ class Game {
         this.thingySprite.y = this.app.screen.height / 8;
         this.thingyMoveTarget.x = this.app.screen.width / 8;
         this.thingyMoveTarget.y = this.app.screen.height / 8;
+    }
+
+    async #initializeCookie() {
+        this.cookieSpritesheet = await loadSpritesheet('./sprites/Cookie.json');
+        this.thingyAnimationAtlas = this.buildAnimationAtlas();
+        this.thingySprite = new AnimatedSprite(this.thingySpritesheet.animations.bounce_right);
+        this.thingySprite.anchor.set(0.5, 1);
+        this.thingySprite.play();
+        this.thingySprite.x = -this.thingySprite.width;
+        this.thingySprite.y = this.app.screen.height / 8;
     }
 
     #toggleMusic() {
@@ -96,9 +107,10 @@ class Game {
         }
     }
 
-    /**
-     * @returns {Victor}
-     */
+    feedThingy(deltaT) {
+
+    }
+
     #thingyMoveVector() {
         let thingyPos = Victor.fromObject(this.thingySprite);
         let targetPos = Victor.fromObject(this.thingyMoveTarget);

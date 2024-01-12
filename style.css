@@ -57,6 +57,15 @@ main {
     cursor: pointer;
 }
 
+#feed {
+    position: absolute;
+    bottom: 16px;
+    left: 48%;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 .faded {
     opacity: 0.5;
 }
