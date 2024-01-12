@@ -1,0 +1,62 @@
+body {
+    height: 100vh;
+    width: 100vw;
+}
+
+@keyframes logo-bobbing {
+    from {
+        top: 10px;
+    }
+
+    to {
+        top: 22px;
+    }
+}
+
+header {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 10;
+    animation-name: logo-bobbing;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+}
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#hud-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+}
+
+#music-toggle {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.faded {
+    opacity: 0.5;
+}
