@@ -17,21 +17,30 @@ class Game {
     thingyHunger = 0.5;
     thingyHealth = 1;
     cookieSpritesheet;
+    cookieSprite;
+    feeding = false;
 
     async main() {
         this.musicPlayer.loop = true;
         $('#music-toggle').on('click', () => this.#toggleMusic());
+        $('#feed').on('click', () => this.feedThingy());
         this.app = this.#createApplication('#canvas-container');
         await this.#initializeThingy();
+        await this.#initializeCookie();
         this.app.stage.addChild(this.thingySprite);
         let updateTicker = new Ticker();
         updateTicker.add((deltaT) => this.moveThingy(deltaT));
-        updateTicker.add((deltaT) => this.updateThingyStatus(deltaT));
+        updateTicker.add((deltaT) => this.updateStatus(deltaT));
         updateTicker.start();
         $(window).on('resize', () => {
             this.app.resize();
+            this.cookieSprite.stop();
+            this.app.stage.removeChild(this.cookieSprite);
+            this.changeAnimation(this.selectThingyAnimation());
             this.thingyMoveTarget.x = this.app.screen.width / 8;
             this.thingyMoveTarget.y = this.app.screen.height / 8;
+            this.cookieSprite.x = this.app.screen.width / 8;
+            this.cookieSprite.y = this.app.screen.height / 8 + this.thingySprite.height;
         });
     }
 
@@ -54,16 +63,18 @@ class Game {
         this.thingySprite.y = this.app.screen.height / 8;
         this.thingyMoveTarget.x = this.app.screen.width / 8;
         this.thingyMoveTarget.y = this.app.screen.height / 8;
+        this.thingySprite.on('mousemove', () => { 
+            this.changeAnimation('bounce_lef_love');
+        });
     }
 
     async #initializeCookie() {
         this.cookieSpritesheet = await loadSpritesheet('./sprites/Cookie.json');
-        this.thingyAnimationAtlas = this.buildAnimationAtlas();
-        this.thingySprite = new AnimatedSprite(this.thingySpritesheet.animations.bounce_right);
-        this.thingySprite.anchor.set(0.5, 1);
-        this.thingySprite.play();
-        this.thingySprite.x = -this.thingySprite.width;
-        this.thingySprite.y = this.app.screen.height / 8;
+        this.cookieSprite = new AnimatedSprite(this.cookieSpritesheet.animations.eat);
+        this.cookieSprite.anchor.set(0.5, 1);
+        this.cookieSprite.x = this.app.screen.width / 8;
+        this.cookieSprite.y = this.app.screen.height / 8 + this.thingySprite.height;
+        this.cookieSprite.loop = false;
     }
 
     #toggleMusic() {
@@ -90,9 +101,6 @@ class Game {
         if ((deltaPos.x < 0 && !this.thingyMovingLeft) || (deltaPos.x > 0 && this.thingyMovingLeft)) {
             this.flipThingy();
         }
-    }
-
-    updateThingyStatus(deltaT) {
         let oldHappiness = this.thingyHappiness;
         if (this.thingySprite.x < 0 || this.thingySprite.y < 0 || this.thingySprite.x > this.app.screen.width / 4 || this.thingySprite.y > this.app.screen.height / 4) {
             this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.005);
@@ -107,8 +115,31 @@ class Game {
         }
     }
 
-    feedThingy(deltaT) {
+    updateStatus(deltaT) {
+        let hungerValue = this.thingyHunger * 100 + "%";
+        let happinessValue = this.thingyHappiness * 100 + "%";
+        $('#hunger_progress').width(hungerValue);
+        $('#happiness_progress').width(happinessValue);
+        this.thingyHunger = Math.max(0, this.thingyHunger - deltaT * 0.00003);
+        if(this.thingyHunger < 0.1) {
+            this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.005);
+        } else {
+            this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.00001);
+        }
+    }
 
+    feedThingy() {
+        this.cookieSprite.onComplete = () => {};
+        this.thingySprite.x = this.app.screen.width / 8;
+        this.thingySprite.y = this.app.screen.height / 8;
+        this.app.stage.addChild(this.cookieSprite);
+        this.changeAnimation('eat_right');
+        this.cookieSprite.gotoAndPlay(0);
+        this.cookieSprite.onComplete = () => {
+            this.app.stage.removeChild(this.cookieSprite);
+            this.changeAnimation('bounce_right');
+            this.thingyHunger = Math.min(1, this.thingyHunger + 0.2);;
+        };
     }
 
     #thingyMoveVector() {

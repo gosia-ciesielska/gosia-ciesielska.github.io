@@ -59,11 +59,67 @@ main {
 
 #feed {
     position: absolute;
-    bottom: 16px;
+    bottom: 80px;
     left: 48%;
     background: none;
     border: none;
     cursor: pointer;
+}
+
+#hunger_bar {
+    position: absolute;
+    bottom: 20px;
+    left: 44%;
+    background: gainsboro;
+    border: 1px;
+    height: 20px;
+    width: 15%;
+    box-shadow: 3px 3px 3px lightslategray;
+    border-radius: 25px;
+}
+
+#hunger_progress {
+    position: absolute;
+    background-image: linear-gradient(to bottom right, green, lightgreen);
+    border: 1px;
+    height: 20px;
+    width: 50%;
+    border-radius: 25px;
+}
+
+#hunger_icon {
+    position: absolute;
+    bottom: 16px;
+    left: 41.5%;
+    background: none;
+}
+
+#happiness_bar {
+    position: absolute;
+    bottom: 50px;
+    left: 44%;
+    background: gainsboro;
+    border: 1px;
+    height: 20px;
+    width: 15%;
+    box-shadow: 3px 3px 3px lightslategray;
+    border-radius: 25px;
+}
+
+#happiness_progress {
+    position: absolute;
+    background-image: linear-gradient(to bottom right, pink, hotpink);
+    border: 1px;
+    height: 20px;
+    width: 50%;
+    border-radius: 25px;
+}
+
+#happiness_icon {
+    position: absolute;
+    bottom: 50px;
+    left: 41.5%;
+    background: none;
 }
 
 .faded {
