@@ -63,9 +63,6 @@ class Game {
         this.thingySprite.y = this.app.screen.height / 8;
         this.thingyMoveTarget.x = this.app.screen.width / 8;
         this.thingyMoveTarget.y = this.app.screen.height / 8;
-        this.thingySprite.on('mousemove', () => { 
-            this.changeAnimation('bounce_lef_love');
-        });
     }
 
     async #initializeCookie() {
@@ -120,11 +117,11 @@ class Game {
         let happinessValue = this.thingyHappiness * 100 + "%";
         $('#hunger_progress').width(hungerValue);
         $('#happiness_progress').width(happinessValue);
-        this.thingyHunger = Math.max(0, this.thingyHunger - deltaT * 0.00003);
+        this.thingyHunger = Math.max(0, this.thingyHunger - deltaT * 0.00004);
         if(this.thingyHunger < 0.1) {
             this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.005);
         } else {
-            this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.00001);
+            this.thingyHappiness = Math.max(0, this.thingyHappiness - deltaT * 0.00002);
         }
     }
 
@@ -138,7 +135,8 @@ class Game {
         this.cookieSprite.onComplete = () => {
             this.app.stage.removeChild(this.cookieSprite);
             this.changeAnimation('bounce_right');
-            this.thingyHunger = Math.min(1, this.thingyHunger + 0.2);;
+            this.thingyHunger = Math.min(1, this.thingyHunger + 0.2);
+            this.thingyHappiness = Math.min(1, this.thingyHappiness + 0.02);
         };
     }
 
